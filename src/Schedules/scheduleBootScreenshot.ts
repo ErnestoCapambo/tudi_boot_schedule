@@ -5,9 +5,9 @@ async function scheduleBootScreenshot() {
     let url =  'http://127.0.0.1:8000/aviator_boot/screenshot'
 
     axios.get(url).then((response) => {
-        console.log(`Response from screenshot URL`, response.data)
+        return
     }).catch((error) => {
-        console.error(`Error fetching data from screenshot!`);
+        return
     })
 }
 
