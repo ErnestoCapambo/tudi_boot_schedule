@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model hability {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(45)
+  description String?   @db.VarChar(500)
+  image_url   String?
+  image_key   String?
+  created_at  DateTime? @default(now())
+  user_id     String
+  user        user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_hability_User1")
+
+  @@index([user_id], map: "fk_Hability_User1_idx")
+  @@map("Hability")
+}
+
+model certifications {
+  id       String  @id @default(uuid())
+  name     String
+  link     String?
+  file_url String?
+  file_key String?
+  user_id  String
+
+  user user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([user_id], map: "fk_Certifications_user_idx")
+  @@map("Certifications")
+}
+
+model maintitle {
+  id          String @id @default(uuid())
+  title       String
+  description String
+  user_id     String
+  user        user   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Maintitle_User1")
+
+  @@index([user_id], map: "fk_Maintitle_User1_idx")
+  @@map("Maintitle")
+}
+
+model message {
+  id               String    @id @default(uuid())
+  costumer_name    String
+  costumer_email   String    @unique(map: "email_Unique")
+  costumer_contact String?   @db.VarChar(45)
+  description      String
+  created_at       DateTime? @default(now())
+  seen             Boolean?  @default(false)
+
+  @@map("Message")
+}
+
+model project {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  file_url    String?
+  file_key    String?
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @default(now())
+  user_id     String
+  user        user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Project_User")
+
+  @@index([user_id], map: "fk_Project_user_idx")
+  @@map("Project")
+}
+
+model user {
+  id             String           @id @default(uuid())
+  username       String
+  email          String           @unique(map: "email_UNIQUE") @db.VarChar(150)
+  password       String
+  contact        String?          @db.VarChar(45)
+  image_url      String?
+  image_key      String?
+  hability    hability[]
+  maintitle      maintitle[]
+  project        project[]
+  certifications certifications[]
+
+  @@map("User")
+}
