@@ -1,13 +1,13 @@
-import scheduleBootScreenshot from './scheduleBootScreenshot'
+import checkSessionExpiredToRestartBoot from './checkSessionExpiredToRestartBoot'
 
 class ManagerCron {
     jobs: any;
 
     constructor() {
         this.jobs = [
-            // Screenshot Jobs
+            // Cron Jobs
 
-            scheduleBootScreenshot,
+            checkSessionExpiredToRestartBoot,
         ];
     }
 
